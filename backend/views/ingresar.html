@@ -1,0 +1,85 @@
+{% extends "base-login.html" %}
+
+{% block contenido %}
+	<section id="wrapper" class="login-register">
+		<div class="login-box">
+			<div class="white-box">
+				
+				{% if mensaje_error != '' %}
+					<div class="alert alert-danger alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						{{ mensaje_error }}
+					</div>					
+				{% endif %}
+				
+				{% if mensaje_exito != '' %}
+					<div class="alert alert-success alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						{{ mensaje_exito }}
+					</div>			
+				{% endif %}
+				
+				<div id="notificacion_campos" class="alert alert-danger alert-bold-border fade in alert-dismissable" style="display:none">
+				  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				  <strong>Hay un Error!</strong> Debe llenar todos los campos para ingresar a su cuenta.
+				</div>
+				
+				
+				
+				{% set form = active_form_begin({
+					'id': 'form-login',
+					'options': {
+						'class': 'form-horizontal form-material',
+					}
+				}) %}
+					
+					<h3 class="text-center m-b-40">{{ app.params.name }}</h3>
+					<div class="form-group ">
+						<div class="col-xs-12">							
+							{{  form.field(model, 'usuario').textInput({'class': 'form-control', 'data-requerido': '1'}) | raw }}
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12">
+							{{  form.field(model, 'clave').passwordInput({'class': 'form-control', 'data-requerido': '1'}) | raw }}
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12">
+							<a href="/{{ app.params.url_admin }}/recuperar" class="text-dark pull-right"><i class="fa fa-lock m-r-5"></i> ¿Olvidaste tu contraseña?</a>
+						</div>
+					</div>
+					<div class="form-group text-center m-t-20">
+						<div class="col-xs-12">
+							<button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Ingresar</button>
+						</div>
+					</div>
+					
+				
+				{{ active_form_end() }}
+				
+			</div>
+		</div>
+	</section>
+{% endblock contenido %}
+
+{% block extra_js %}
+	<script>
+		$('#form-login').submit(function(){
+			var error_campos = false;			
+			$('[name^=IngresarForm]').each(function(campo){
+				if($("[name='" + this.name + "']").val() == '' && $("[name='" + this.name + "']").data('requerido') == 1){
+					$("[name='" + this.name + "']").parent().addClass('has-error');						
+					error_campos = true;
+				}
+				else
+					$("[name='" + this.name + "']").parent().removeClass('has-error');
+			});	
+						
+			if(error_campos){
+				$('#notificacion_campos').css('display', '');
+				return false;
+			}
+		});
+	</script>
+{% endblock extra_js %}

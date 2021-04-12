@@ -1,0 +1,135 @@
+{{ this.beginPage() }}
+<!DOCTYPE html>
+<html class="wide wow-animation smoothscroll" lang="es" xmlns:og='http://ogp.me/ns#' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+	<meta charset="utf-8">
+	<!-- Site Title-->
+	<title>{% block titulo %}{% endblock titulo %}</title>
+	<meta name="description" content="">
+	<meta name="abstract" content="">
+	<link rel="canonical" href="">
+	<meta name="distribution" content="global">
+	<meta name="author" content="">
+	<meta name="copyright" content="">
+	
+	{% block extra_meta %}
+		<!-- METACARACTERES PARA FACEBOOK -->
+		<meta property="og:image" content="" />
+		<meta property="og:url"content="" />
+		<meta property="og:title" content="" />
+		<meta property="og:description" content="" />
+		
+		<!-- METACARACTERES PARA TWITTER -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@VE" />
+		<meta name="twitter:creator" content="@VE">
+		<meta name="twitter:title" content="" />
+		<meta name="twitter:description" content="" />
+		<meta name="twitter:image" content="" />
+	{% endblock extra_meta %}
+	
+	
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+
+	<link rel="icon" href="/images/favicon.png" type="image/png">
+	<!-- Stylesheets-->
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Libre+Franklin:200,300,500,600,300italic">
+	<link rel="stylesheet" id="bloomy-google-font-css" href="http://fonts.googleapis.com/css?family=Abel:300,400,500,600,700,800" type="text/css" media="all">
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/style.css">
+	
+	{{ this.head() }}
+	
+	<!--[if lt IE 10]>
+	<div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="https://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
+	<script src="js/html5shiv.min.js"></script>
+	<![endif]-->
+	
+	
+	{% block extra_css %}{% endblock extra_css %}
+</head>
+
+{{ this.beginBody() }}
+<body>
+	<!-- Page -->
+	<div class="page">
+		
+		
+		<nav class="mobile-menu">
+            <div id="close-button"><i class="fa fa-times"></i></div>
+			
+			<ul id="menu-primary-menu" class="menu">
+				<li id="menu-item-384" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-381 current_page_item menu-item-has-children menu-item-384"><a href="http://med-cmc.com/">ARTÍCULOS</a></li>
+				<li id="menu-item-569" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-569"><a href="http://med-cmc.com/video-cursos-de-certificacion/">VIDEO CURSOS DE CERTIFICACIÓN</a></li>
+				<li id="menu-item-521" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-521"><a href="http://med-cmc.com/registro/">REGISTRO</a></li>
+				<li id="menu-item-443" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-443"><a href="http://med-cmc.com/contacto/">CONTACTO</a></li>
+			</ul>            
+		</nav>
+		
+		<header class="main-header header-1 clearfix" itemscope="" itemtype="http://schema.org/WPHeader" role="banner">
+			<div class="container">
+				<div class="header clearfix">
+					<div class="logo-wrap">
+						<a href="http://med-cmc.com/" class="custom-logo-link" rel="home" itemprop="url"><img src="http://med-cmc.com/wp-content/uploads/2019/01/LOGO-328x96b.png" class="custom-logo" alt="Revista MED Comunicación Médica Continua" itemprop="logo" srcset="http://med-cmc.com/wp-content/uploads/2019/01/LOGO-328x96b.png 328w, http://med-cmc.com/wp-content/uploads/2019/01/LOGO-328x96b-300x88.png 300w" sizes="(max-width: 328px) 100vw, 328px" width="328" height="96"></a>
+					</div>
+					<div class="menu-btn off-menu fa fa-align-justify"></div>
+					
+					<div class="main-nav">
+						
+						<div class="social-links">
+							<a class="fa fa-facebook facebook" href="https://www.facebook.com/MEDComunicacion/"></a>
+							<a class="fa fa-twitter twitter" href="https://twitter.com/MedMedica"></a>
+						</div><!-- .social-links -->
+						
+						<nav class="nav-menu" id="nav-menu" itemscope="" itemtype="http://schema.org/SiteNavigationElement">
+							<ul id="menu-primary-menu-1" class="menu">
+								<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-381 current_page_item menu-item-has-children menu-item-384"><a href="http://med-cmc.com/">ARTÍCULOS</a></li>
+								<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-569"><a href="http://med-cmc.com/video-cursos-de-certificacion/">VIDEO CURSOS DE CERTIFICACIÓN</a></li>
+								<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-521"><a href="http://med-cmc.com/registro/">REGISTRO</a></li>
+								<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-443"><a href="http://med-cmc.com/contacto/">CONTACTO</a></li>
+							</ul>
+						</nav>
+						
+					</div>
+				</div>
+			</div>
+		</header>
+		
+		{% block contenido %} {% endblock contenido %}
+		
+		{% block contenido_extra %} {% endblock contenido_extra %}
+		
+		
+
+    </div>
+    
+	
+
+    <script src="/js/jquery-3.3.1.min.js"></script>
+	<script src="/js/bootstrap.js"></script>
+	
+	<script>
+		$(document).ready(function(){
+			
+		});
+		
+		$('.menu-btn').click(function(e) {
+		  e.preventDefault();
+		  e.stopPropagation();
+		  $("html").toggleClass("openNav");
+		});
+		
+		$('#close-button').click(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$("html").toggleClass("openNav");
+		});
+		
+	</script>
+	{% block extra_js %}{% endblock extra_js %}
+	
+{{ this.endBody() }}
+</body>
+</html>

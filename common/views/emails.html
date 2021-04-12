@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="initial-scale=1.0"/>
+<meta name="format-detection" content="telephone=no">
+<title>Responsive E-mail Template</title>
+
+<style type="text/css">.ReadMsgBody{width:100%;background-color:#ffffff;}.ExternalClass{width:100%;background-color:#ffffff;}.ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalClass font,.ExternalClass td,.ExternalClass div{line-height:100%;}html{width:100%;margin:0;padding:0;}body{-webkit-text-size-adjust:none;-ms-text-size-adjust:none;margin:0;padding:0;-webkit-font-smoothing:antialiased;}table{border-spacing:0;}img{display:block!important;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;border:none;height:auto;line-height:100%;vertical-align:bottom;}p{padding:0;margin:0;}br{line-height:0!important;}div,p,span,strong,b,em,i,a,li,td{-webkit-text-size-adjust:none;}.b-letter__body{background:#cccccc!important;}table td,table tr{border-collapse:collapse;}table{border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;}ul{list-style:none;margin:0;padding:0;}.js-phone-number,.highlight-phone{color:#ffffff!important;text-decoration:none!important;}@media only screen and (max-width: 640px){body{width:auto!important;}table[class="container"],td[class="container"],img[class="container"]{width:100%!important;}table[class="remove"]{display:none!important;}td[class="remove-container"]{display:none!important;}table[class="remove-float"]{float:none!important;}table[class="container-260"]{width:100%!important;float:none!important;}table[class="container-68"]{width:68%!important;}table[class="container-171"]{width:171px!important;float:none!important;}img[class="container-171"]{width:171px!important;}}@media only screen and (max-width: 460px){table[class="container-360"]{width:200px!important;}}</style>
+
+</head>
+<body style="width:100% !important;">
+	
+	<!-- CABECERA DE LA PAGINA -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="background-color: #FFFFFF; border-bottom: 4px solid #000000;">
+	<tr>
+	<td align="center" valign="top">
+	<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" class="container">
+	<tr>
+	<td align="center" valign="top" style="padding: 0 21px;">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" class="container">
+	<tr>
+	<td valign="top" align="center">
+	 
+	<table border="0" cellspacing="0" cellpadding="0" align="left" class="container">
+	 
+	<tr>
+	<td valign="top" height="30">
+	</td>
+	</tr>
+	 
+	<tr>
+	<td align="center" valign="top">
+	<a href="{{ url_sitio }}" style="color: #ffffff; text-decoration: none; font-family:Trebuchet MS, sans-serif; font-size: 30px; line-height: 38px; font-weight: bold; text-transform: none;"><img src='{{ url_sitio }}/images/logo.png' /></a>
+	</td>
+	</tr>
+	 
+	<tr>
+	<td valign="top" height="24">
+	</td>
+	</tr>
+	 
+	</table>
+	 
+	
+	<table border="0" cellspacing="0" cellpadding="0" align="right" class="container">
+	 
+	<tr>
+	<td valign="top" height="60" class="remove-container">
+	</td>
+	</tr>
+	 
+	<tr>
+	<td align="center" valign="top">
+	</td>
+	</tr>
+	 
+	<tr>
+	<td valign="top" height="24">
+	</td>
+	</tr>
+	 
+	</table>
+	 
+	</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	<!-- FIN DE CABECERA -->
+	
+	
+	<!-- CONTENIDO DEL EMAIL  -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+	<tr>
+	<td align="center" valign="top">
+	<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" class="container">
+	<tr>
+	<td align="center" valign="top" style="padding: 0 21px;">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+	 
+	<tr>
+	<td valign="top" height="30">
+	</td>
+	</tr>
+	 
+	<tr>
+	<td valign="top" class="indent-10">
+	<h2 style="padding: 0; margin: 0; color: #686868; font-family: Trebuchet MS, sans-serif; font-size: 26px; line-height: 30px; font-weight: bold; text-decoration: none">{{ titulo }}</h2>
+	</td>
+	</tr>
+	 
+	<tr>
+	<td valign="top" height="14">
+	</td>
+	</tr>
+	
+	
+	<tr><td valign="top" style="color: #767679; font-family:Trebuchet MS, sans-serif; font-size: 12px; line-height: 
+	20px;"><p>
+			
+	<div>{{ contenido|raw }}</div>
+			
+	</p></td></tr>
+	
+	
+	
+	
+	<tr>
+		<td valign="top" height="30" style=" border-bottom: 1px solid #D8D8D8;"></td>
+	</tr> 
+	<tr>
+		<td valign="top" height="10"></td>
+	</tr> 
+	
+	<tr><td valign="top" style="color: #767679; font-family:Trebuchet MS, sans-serif; font-size: 12px; line-height: 
+	20px;"><p>
+			
+	This is an automatic message and it is not necessary that you respond to this email. Any questions can write us an email to <span style='font-weight:bold;color:#45392E;text-decoration: none;'>{{ email_sitio }}</span> or visit our website <a href="{{ email_sitio }}"><span style='font-weight:bold;color:#45392E;text-decoration: none;'>{{ nombre_sitio }}</span></a>. We are here to serve you at all times and thank you for always preferring us.	
+			
+			
+	</p></td></tr>
+	 
+
+	<tr>
+	<td valign="top" height="36">
+	</td>
+	</tr>
+	 
+	</table>
+	</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	<!-- FIN DEL CONTENIDO -->
+	
+	
+	<!-- PIE DE PAGINA -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="background-color: #000000; border-top: 4px solid #6B85B9">
+	<tr>
+	<td alig
+	n="center" valign="top">
+	<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" class="container">
+	<tr>
+	<td align="center" valign="top" style="padding: 0 21px;">	 
+	 
+	<table width="400px" border="0" cellspacing="0" cellpadding="0" align="center" class="remove-float">
+	 
+	<tr>
+	<td valign="top" height="20"></td>
+	</tr>
+	 
+	<tr>
+	<td valign="top" align="center" style="font-size: 14px; line-height: 20px; color: #ffffff;font-family:Trebuchet MS, sans-serif;">
+		<a href="{{ url_sitio }}" style="color: black; text-decoration: none;">{{ nombre_sitio }}</a>
+	</td>
+	</tr>
+	 
+	<tr>
+	<td valign="top" height="20"></td>
+	</tr>
+	 
+	</table>
+	</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	<!-- FIN DEL PIE DE PAGINA -->
+	
+</body>
+</html>

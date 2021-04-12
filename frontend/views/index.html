@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ app.params.name }}{% endblock titulo %}
+
+{% block extra_css %}
+	<style>
+		.link-banner{
+			cursor: pointer;
+		}
+	</style>
+{% endblock extra_css %}
+
+{% block contenido %}
+
+	<!-- Swiper-->
+	<section>
+		<div class="swiper-container swiper-slider">
+			<div class="swiper-wrapper">
+				
+				{% for banner in banners %}
+					<div class="swiper-slide bg-gray-lighter link-banner" data-slide-bg="" data-link="{{ banner.link }}">
+						<img src="/media/imagenes/{{ banner.imagen0.imagen }}" />
+					</div>
+				{% endfor %}
+				
+			</div>
+	
+	
+			<!-- Swiper Pagination -->
+			<div class="swiper-pagination"></div>
+			
+			<!-- Swiper Navigation-->
+			<div class="swiper-button-prev linear-icon-chevron-left"></div>
+			<div class="swiper-button-next linear-icon-chevron-right"></div>
+		</div>
+	</section>
+  
+  
+	<!-- Blurbs-->
+	<section class="section-xs bg-gray-lighter">
+		<div class="shell">
+			<div class="range range-50">
+				<div class="cell-xs-12 cell-sm-5 cell-md-5 cell-lg-5">
+					
+					<!-- PROXIMOS EVENTOS -->
+					<div id="proximos_eventos" class="proximos-eventos" style="height:200px; overflow-y:auto; min-height:400px;">
+						<div class="titulo">
+							<h3>Proximos Eventos</h3>
+							
+							<select id="proximos_eventos_estado" name="estado" class="campo-seleccionar">
+								<option value="">Seleccione un lugar</option>
+								
+								{% for estado in this.context.estados_globales %}
+									<option value="{{ estado.id }}">{{ estado.estado }}</option>
+								{% endfor %}
+							</select>
+							
+							<div class="clearfix"></div>
+						</div>
+						
+						<div id="contenedor_proximos_eventos" class="contenidos-evento"></div>
+					</div>
+				</div>
+				
+				<div id="contenedor_eventos_destacados" class="cell-xs-12 cell-sm-7 cell-md-7 cell-lg-7">
+					
+					<div class="row">
+						{% for anuncio in anuncios_1 %}
+							<div class="col-xs-{{ anuncio.obtenerTamanoColumna }} col-sm-{{ anuncio.obtenerTamanoColumna }} col-md-{{ anuncio.obtenerTamanoColumna }} col-lg-{{ anuncio.obtenerTamanoColumna }}">
+								
+								{% if anuncio.anuncio0.tipo_anuncio == 'Imagen' %}
+									<a class="anuncio-imagen" href="{{ anuncio.anuncio0.url }}" target="_blank">{{ anuncio.anuncio0.generarHtml|raw }}</a>
+								{% endif %}
+								
+								{% if anuncio.anuncio0.tipo_anuncio == 'Galeria' %}
+									{{ anuncio.anuncio0.generarHtml|raw }}
+								{% endif %}
+							</div>
+						{% endfor %}
+					</div>
+					
+					<div id="eventos_destacados" class="listado-eventos">
+						<div class="titulo">Destacados</div>
+						<div class="clearfix"></div>
+						
+						<div class="listado">
+							<div class="contenedor-bloques">
+							
+								{% for evento in eventos_destacados %}
+									<a href="/{{ evento.categoria0.url }}/{{ evento.url }}">
+										<div class="evento-horizontal">
+											<div class="imagen">
+												<img src="/media/imagenes/{{ evento.imagenPrincipal.imagen }}" />
+											</div>
+											
+											<div class="contenido-evento">
+												<div class="titulo-evento">{{ evento.titulo }}</div>
+												<div class="descripcion">
+													{{ evento.estado0.estado }} - {{ evento.lugar }}<br/>
+													Sat 14 de Abril
+												</div>
+											</div>
+											
+											<div class="boton-link">Ver Boletos</div>
+										</div>
+									</a>
+								{% endfor %}
+								
+								<div class="clearfix"></div>
+							</div>
+							
+						</div>
+					</div>
+					
+					<div id="eventos_mas_buscados" class="listado-eventos">
+						<div class="titulo">Lo más buscado</div>
+						<div class="clearfix"></div>
+						
+						<div class="listado">
+							<div class="contenedor-bloques">
+							
+								{% for evento in eventos_mas_buscados %}
+									<a href="/{{ evento.categoria0.url }}/{{ evento.url }}">
+										<div class="evento-horizontal">
+											<div class="imagen">
+												<img src="/media/imagenes/{{ evento.imagenPrincipal.imagen }}" />
+											</div>
+											
+											<div class="contenido-evento">
+												<div class="titulo-evento">{{ evento.titulo }}</div>
+												<div class="descripcion">
+													{{ evento.estado0.estado }} - {{ evento.lugar }}<br/>
+													Sat 14 de Abril
+												</div>
+											</div>
+											
+											<div class="boton-link">Ver Boletos</div>
+										</div>
+									</a>
+								{% endfor %}
+								
+								<div class="clearfix"></div>
+							</div>
+							
+						</div>
+					</div>
+					
+					<div class="row" style="margin-top:20px;">
+						{% for anuncio in anuncios_2 %}
+							<div class="col-xs-{{ anuncio.obtenerTamanoColumna }} col-sm-{{ anuncio.obtenerTamanoColumna }} col-md-{{ anuncio.obtenerTamanoColumna }} col-lg-{{ anuncio.obtenerTamanoColumna }}">
+								
+								{% if anuncio.anuncio0.tipo_anuncio == 'Imagen' %}
+									<a class="anuncio-imagen" href="{{ anuncio.anuncio0.url }}" target="_blank">{{ anuncio.anuncio0.generarHtml|raw }}</a>
+								{% endif %}
+								
+								{% if anuncio.anuncio0.tipo_anuncio == 'Galeria' %}
+									{{ anuncio.anuncio0.generarHtml|raw }}
+								{% endif %}
+							</div>
+						{% endfor %}
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</section>
+
+{% endblock contenido %}
+
+{% block extra_js %}
+	<script>
+		var tamano_bloque_2 = 0;
+		
+		$(document).ready(function(){
+			// PARA EL MENU DE OPCIONES
+			$('#menu_inicio').addClass("active");
+			
+			
+			$('#eventos_destacados .contenedor-bloques').slick({
+			  infinite: true,
+			  speed: 300,
+			  slidesToShow: 4,
+			  slidesToScroll: 1,
+			  responsive: [
+				{
+				  breakpoint: 1024,
+				  settings: {
+					slidesToShow: 3,
+					slidesToScroll: 1
+				  }
+				},
+				{
+				  breakpoint: 600,
+				  settings: {
+					slidesToShow: 2,
+					slidesToScroll: 1
+				  }
+				},
+				{
+				  breakpoint: 480,
+				  settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1
+				  }
+				}
+			  ]
+			});
+			
+			$('#eventos_mas_buscados .contenedor-bloques').slick({
+			  infinite: true,
+			  speed: 300,
+			  slidesToShow: 4,
+			  slidesToScroll: 1,
+			  responsive: [
+				{
+				  breakpoint: 1024,
+				  settings: {
+					slidesToShow: 3,
+					slidesToScroll: 1
+				  }
+				},
+				{
+				  breakpoint: 600,
+				  settings: {
+					slidesToShow: 2,
+					slidesToScroll: 1
+				  }
+				},
+				{
+				  breakpoint: 480,
+				  settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1
+				  }
+				}
+			  ]
+			});
+			
+			
+			setInterval(function(){
+				$('#proximos_eventos').css('height', parseInt($('#contenedor_eventos_destacados').css('height')));
+				
+				// PARA EL DOTDOTDOT
+				$(".contenido-evento .titulo-evento").dotdotdot();
+				$(".contenido-evento .descripcion").dotdotdot();
+			}, 500);
+			
+			// PARA CARGAR LOS PROXIMOS Eventos
+			cargar_proximos_eventos();
+			
+		});
+		
+		$('#proximos_eventos_estado').change(function(){
+			cargar_proximos_eventos();
+		});
+		
+		function cargar_proximos_eventos(){
+			var estado = $('#proximos_eventos_estado').val();
+			
+			$.ajax({
+				url: '/utilidades/listado-eventos-ajax',
+				method: 'POST',
+				data: {
+					'{{ app.request.csrfParam }}': '{{ app.request.csrfToken }}',
+					'estado': estado,
+					'categoria': '',
+					'limite': '20',
+				},
+				timeout: 20000,
+				beforeSend: function(){
+					console.log('Cargando el listado de proximos eventos via ajax...');
+					
+					$('#contenedor_proximos_eventos').html('<div class="informacion">Cargando proximos eventos...</div>');
+				},
+				success: function(data){					
+					$('#contenedor_proximos_eventos').html('');
+					
+					console.log(data);
+					
+					if(data.length > 0){
+						$.each(data, function(index, valor){							
+							var html_evento = ' \
+								<a href="/' + valor.categoria_url + '/' + valor.url + '"> \
+									<div class="evento"> \
+										<div class="imagen"> \
+											<img src="/media/imagenes/' + valor.imagen_principal + '"/> \
+										</div> \
+										\
+										<div class="contenido"> \
+											<div class="titulo">' + valor.titulo + '</div> \
+											<div class="descripcion">' + valor.sinopsis + '</div> \
+										</div> \
+										\
+										<div class="fecha"> \
+											<div class="mes">' + valor.fecha_evento_mes + '</div> \
+											<div class="dia">' + valor.fecha_evento_dia + ' ' + valor.fecha_evento_dia_solo + '</div> \
+										</div> \
+									</div> \
+									<div class="clearfix"></div> \
+								</a> \
+							';
+							
+							$('#contenedor_proximos_eventos').append(html_evento);
+						});
+					}
+					else{
+						$('#contenedor_proximos_eventos').html('<div class="informacion">No existen proximos eventos para el estado seleccionado. Intente realizar su busqueda con otro estado...</div>');
+					}
+				},
+				error: function(x, t, m) {
+					if(t === "timeout") {
+						console.log('El servidor ha tardado mucho en dar respuesta a la solicitud...');
+					} else {
+						console.log('Ha ocurrido un error inesperado al intentar cargar los eventos...');
+					}
+				}
+			});
+		}
+	</script>
+{% endblock extra_js %}

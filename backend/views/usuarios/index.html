@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+	<div class="container-fluid">
+		<!-- .row -->
+		<div class="row bg-title" style="background:url(/admin/plugins/images/heading-title-bg.jpg) no-repeat center center /cover;">
+			<div class="col-lg-12">
+				<h4 class="page-title">Usuarios</h4>
+			</div>
+			
+			<div class="col-sm-12 col-md-12 col-xs-12">
+				<ol class="breadcrumb pull-left">
+					<li><a href="/{{ app.params.url_admin }}">Inicio</a></li>
+					<li class="active">Usuarios</li>
+				</ol>
+			</div>
+		</div>
+		<!-- /.row -->
+      
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="white-box">
+					<h3 class="box-title m-b-20">Lista de Usuarios</h3>
+				
+					
+					<div class="pull-left text-left m-b-sm" style="margin-top: 10px;">
+						<span id="cantidad_modelos">0</span> registros en total
+					</div>
+					
+					<div class="pull-right text-right m-b-sm" style="margin-bottom: 10px;">
+						<a id="reiniciar_filtros" href="javascript:;"><button class="btn btn-sm btn-info">Reiniciar Filtros</button></a>
+						<a id="filtrar_resultados" href="javascript:;"><button class="btn btn-sm btn-warning">Filtrar Resultados</button></a>
+					</div>
+					<div class="clearfix"></div>
+					
+				
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th style="width:80px;">
+										<input id="filtro_id" name="Filtros['id']" class="form-control input-sm" placeholder="Id" />
+									</th>
+									<th>
+										<input id="filtro_usuario" name="Filtros['usuario']" class="form-control input-sm" placeholder="Usuario" />
+									</th>
+									<th>
+										<input id="filtro_email" name="Filtros['email']" class="form-control input-sm" placeholder="Email" />
+									</th>
+									<th>
+										<select id="filtro_tipo_usuario" name="Filtros['tipo_usuario']" class="form-control input-sm">
+											<option value="">Seleccione una opción</option>
+											<option value="Administrador">Administrador</option>
+										</select>
+									</th>
+									
+									<th class="text-nowrap" style="width:60px;"></th>
+								</tr>
+								
+								<tr>
+									<th>
+										Id
+										<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="id ASC"><i class="fa fa-arrow-up"></i></a>
+										<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="id DESC"><i class="fa fa-arrow-down"></i></a>
+									</th>
+									<th>
+										Usuario
+										<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="usuario ASC"><i class="fa fa-arrow-up"></i></a>
+										<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="usuario DESC"><i class="fa fa-arrow-down"></i></a>
+									</th>
+									<th>
+										Email
+										<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="email ASC"><i class="fa fa-arrow-up"></i></a>
+										<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="email DESC"><i class="fa fa-arrow-down"></i></a>
+									</th>									
+									<th>
+										Tipo Usuario
+										<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="tipo_usuario ASC"><i class="fa fa-arrow-up"></i></a>
+										<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="tipo_usuario DESC"><i class="fa fa-arrow-down"></i></a>
+									</th>		
+									
+									<th class="text-nowrap"></th>
+								</tr>
+							</thead>
+							
+							<tbody id="tabla">
+
+							</tbody>
+							
+						</table>
+						
+						<div id="paginacion" class="text-center">
+
+						</div>
+					</div>
+				
+					<div class="text-right">
+						<a href="/admin/usuarios/agregar"><button class="btn btn-info">Agregar</button></a>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+		
+		<!-- MODAL ELIMINAR -->
+		<div class="modal fade" id="modal_eliminar" tabindex="-1" role="dialog" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Eliminar Registro</h4>
+			  </div>
+			  <div class="modal-body">
+				Esta seguro que desea eliminar el registro: <strong id="etiqueta_registro"></strong>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+				<button id="boton_eliminar" type="button" class="btn btn-danger" data-id="">Eliminar</button>
+			  </div><!-- /.modal-footer -->
+			</div><!-- /.modal-content -->
+		  </div><!-- /.modal-doalog -->
+		</div><!-- /#DefaultModal -->
+	  
+    </div>
+    <!-- /.container-fluid -->
+{% endblock contenido %}
+
+{% block extra_js %}
+	<script>
+		var color_orden_activo = '#5c99c0';
+		var color_orden_inactivo = '#b1b1b1';
+		
+		var pagina_actual = 1;
+				
+		var filtro_id = '';
+		var filtro_usuario = '';
+		var filtro_email = '';
+		var filtro_tipo_usuario = '';
+		
+		var orden_campo = 'usuario ASC';
+		
+		$(function(){
+			// PARA ABRIR LAS OPCIONES DEL MENU
+			$('#menu-configuracion').addClass('selected');
+			
+			{% if mensaje_flash != '' %}
+				$.toast({
+					text: '{{ mensaje_flash }}',
+					position: 'top-right',
+					loaderBg:'#ff6849',
+					icon: 'success',
+					hideAfter: 3000, 
+					stack: 6
+				});
+			{% endif %}
+			
+			cargar_listado();
+		});
+		
+		$('body').on('click', '.cambiar_pagina', function(){
+			pagina_actual = $(this).data('pagina');
+			cargar_listado();
+		});
+		
+		$('body').on('click', '.eliminar_registro', function(){
+			id = $(this).data('id');
+			etiqueta = $(this).data('etiqueta');
+			
+			$('#etiqueta_registro').text(etiqueta);
+			$('#boton_eliminar').data('id', id);
+			$('#modal_eliminar').modal('toggle');
+		});
+		
+		$('#boton_eliminar').click(function(){
+			eliminar_registro(id);
+			$('#modal_eliminar').modal('toggle');
+		});
+		
+		$('body').on('click', '.cambiar_orden', function(){
+			orden_campo = $(this).data('orden');
+			
+			
+			// PARA REINICIAR EL COLOR DE LOS BOTONES
+			$('.cambiar_orden').css('color', color_orden_inactivo);
+			$('.cambiar_orden').each(function(index, value){
+				if($(this).data('orden') == orden_campo)
+					$(this).css('color', color_orden_activo);
+			});
+			
+			cargar_listado();
+		});
+		
+		$('#reiniciar_filtros').click(function(){			
+			$('#filtro_id').val('');
+			$('#filtro_usuario').val('');
+			$('#filtro_email').val('');
+			$('#filtro_tipo_usuario').val('');
+			
+			$('#filtrar_resultados').trigger('click');
+		});
+		
+		$('#filtrar_resultados').click(function(){			
+			filtro_id = $('#filtro_id').val();			
+			filtro_usuario = $('#filtro_usuario').val();
+			filtro_email = $('#filtro_email').val();
+			filtro_tipo_usuario = $('#filtro_tipo_usuario').val();
+
+			pagina_actual = 1;
+			
+			cargar_listado();
+		});
+		
+		function cargar_listado(){
+			$.ajax({
+				url: '/admin/usuarios/listado-ajax',
+				method: 'POST',
+				data: {
+					'{{ app.request.csrfParam }}': '{{ app.request.csrfToken }}',
+					'pagina_actual': pagina_actual,
+										
+					'filtro_id': filtro_id,
+					'filtro_usuario': filtro_usuario,
+					'filtro_email': filtro_email,
+					'filtro_tipo_usuario': filtro_tipo_usuario,
+					
+					'orden_campo': orden_campo,
+				},
+				timeout: 20000,
+				beforeSend: function(){
+					console.log('Cargando el listado de registros via ajax...');
+					
+					$('#tabla').html('');
+					$('#paginacion').html('');
+					
+					$('#tabla').append(' \
+						<tr> \
+							<td colspan="6">Cargando el listado de registros...</td> \
+						</tr> \
+					');
+				},
+				success: function(data){					
+					$('#tabla').html('');
+					$('#paginacion').html('');
+					
+					$('#cantidad_modelos').text(data.cantidad_modelos);
+					
+					console.log(data);
+					
+					if(data.cantidad_modelos > 0){
+						$.each(data.listado_modelos, function(index, valor){							
+							$('#tabla').append(' \
+								<tr> \
+									<td>' + valor.id + '</td> \
+									<td>' + valor.usuario + '</td> \
+									<td>' + valor.email + '</td> \
+									<td>' + valor.tipo_usuario + '</td> \
+									\
+									<td> \
+										<a href="/admin/usuarios/editar/' + valor.id + '" data-toggle="tooltip" data-original-title="Editar" class="text-muted" style="padding-right:5px"> <i class="fa fa-pencil"></i> </a> \
+										<a href="javascript:;" data-toggle="tooltip" data-original-title="Eliminar" data-id="' + valor.id + '"  data-etiqueta="' + valor.usuario + '" class="eliminar_registro text-danger" style="padding-right:5px"> <i class="fa fa-times"></i> </a> \
+									</td> \
+								</tr> \
+							');
+						});
+						
+						if(data.cantidad_paginas > 1){
+							var pagina_actual = parseInt(data.pagina_actual);
+							var pagina_anterior = pagina_actual <= 1 ? 1 : pagina_actual - 1;
+							var pagina_siguiente = pagina_actual >= parseInt(data.cantidad_paginas) ? parseInt(data.cantidad_paginas) : pagina_actual + 1;
+
+							
+							$('#paginacion').html(' \
+								<ul class="pagination"> \
+								</ul> \
+							');							
+							
+							
+							$('#paginacion .pagination').append(' \
+								<li class="cambiar_pagina" data-pagina="1"><a href="javascript:;"><i class="fa fa-angle-double-left"></i></a></li> \
+							');
+							
+							$('#paginacion .pagination').append(' \
+								<li class="cambiar_pagina" data-pagina="' + pagina_anterior + '"><a href="javascript:;"><i class="fa fa-angle-left"></i></a></li> \
+							');
+							
+							if(pagina_actual > 3){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + (pagina_anterior - 2) + '"><a href="javascript:;">' + (pagina_anterior - 2) + '</a></li> \
+								');
+							}
+							
+							if(pagina_actual > 2){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + (pagina_anterior - 1) + '"><a href="javascript:;">' + (pagina_anterior - 1) + '</a></li> \
+								');
+							}
+							
+							if(pagina_actual > 1){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + pagina_anterior + '"><a href="javascript:;">' + pagina_anterior + '</a></li> \
+								');
+							}
+							
+							$('#paginacion .pagination').append(' \
+								<li class="active"><a href="javascript:;">' + pagina_actual + '</a></li> \
+							');
+							
+							if(pagina_actual < parseInt(data.cantidad_paginas)){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + pagina_siguiente + '"><a href="javascript:;">' + pagina_siguiente + '</a></li> \
+								');
+							}
+							
+							if(pagina_actual < (parseInt(data.cantidad_paginas) - 1)){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + (pagina_siguiente + 1) + '"><a href="javascript:;">' + (pagina_siguiente + 1) + '</a></li> \
+								');
+							}
+							
+							if(pagina_actual < (parseInt(data.cantidad_paginas) - 2)){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + (pagina_siguiente + 2) + '"><a href="javascript:;">' + (pagina_siguiente + 2) + '</a></li> \
+								');
+							}
+							
+							$('#paginacion .pagination').append(' \
+								<li class="cambiar_pagina" data-pagina="' + pagina_siguiente + '"><a href="javascript:;"><i class="fa fa-angle-right"></i></a></li> \
+							');
+							
+							$('#paginacion .pagination').append(' \
+								<li class="cambiar_pagina" data-pagina="' + data.cantidad_paginas + '"><a href="javascript:;"><i class="fa fa-angle-double-right"></i></a></li> \
+							');
+							
+						}
+					}
+					else{
+						$('#tabla').append(' \
+							<tr> \
+								<td colspan="6">No existen registros en la base de datos con los criterios de busqueda indicados...</td> \
+							</tr> \
+						');
+					}
+				},
+				error: function(x, t, m) {
+					if(t === "timeout") {
+						alert('El servidor ha tardado mucho en dar respuesta a la solicitud...');
+						console.log('El servidor ha tardado mucho en dar respuesta a la solicitud...');
+					} else {
+						alert('Ha ocurrido un error inesperado al intentar cargar los registros...');
+						console.log('Ha ocurrido un error inesperado al intentar cargar los registros...');
+					}
+				}
+			});
+		}
+		
+		function eliminar_registro(id){
+			$.ajax({
+				url: '/admin/usuarios/eliminar-ajax',
+				method: 'POST',
+				data: {
+					'{{ app.request.csrfParam }}': '{{ app.request.csrfToken }}',
+					'id': id,
+				},
+				timeout: 20000,
+				beforeSend: function(){
+					console.log('Eliminando el registro via ajax...');
+				},
+				success: function(data){					
+					console.log(data);
+					
+					if(data.codigo == '1'){
+						$.toast({
+							heading: 'Exito !!',
+							text: data.mensaje,
+							position: 'top-right',
+							loaderBg:'#ff6849',
+							icon: 'success',
+							hideAfter: 3000, 
+							stack: 6
+						});
+						
+						pagina_actual = 1;
+						
+						cargar_listado();
+					}
+					else{
+						$.toast({
+							heading: 'Error !!',
+							text: data.mensaje + '. Codigo: ' + data.codigo,
+							position: 'top-right',
+							loaderBg:'#ff6849',
+							icon: 'error',
+							hideAfter: 3000, 
+							stack: 6
+						});
+						
+						pagina_actual = 1;
+						
+						cargar_listado();
+					}
+				},
+				error: function(x, t, m) {
+					if(t === "timeout") {
+						alert('El servidor ha tardado mucho en eliminar el registro...');
+						console.log('El servidor ha tardado mucho en eliminar el registro...');
+					} else {
+						alert('Ha ocurrido un error inesperado al intentar eliminar el registro...');
+						console.log('Ha ocurrido un error inesperado al intentar eliminar el registro...');
+					}
+				}
+			});
+		}
+	</script>
+{% endblock extra_js %}

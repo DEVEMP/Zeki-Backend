@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+	<div class="container-fluid">
+		<!-- .row -->
+		<div class="row bg-title" style="background:url(/admin/plugins/images/heading-title-bg.jpg) no-repeat center center /cover;">
+			<div class="col-lg-12">
+				<h4 class="page-title">Agregar Notificaciones</h4>
+			</div>
+		   
+			<div class="col-sm-12 col-md-12 col-xs-12">
+				<ol class="breadcrumb pull-left">
+					<li><a href="/admin">Inicio</a></li>
+					<li><a href="/admin/notificaciones">Notificaciones</a></li>
+					<li class="active">Agregar</li>
+				</ol>
+			</div>
+		</div>
+		<!-- /.row -->
+		
+		{% if mensaje_error != '' %}
+			<div class="row">
+				<div class="col-lg-12 col-sm-12">
+					<div class="panel panel-danger">
+						<div class="panel-heading">Error !!
+							<div class="pull-right">
+								<a href="#" data-perform="panel-collapse">
+									<i class="ti-minus"></i></a> <a href="#" data-perform="panel-dismiss"><i class="ti-close"></i>
+								</a> 
+							</div>
+						</div>
+						<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<p>{{ mensaje_error }}</p>
+							
+							{% set form_validation = active_form_begin() %}
+								<div>{{ form_validation.errorSummary(modelo) | raw }}</div>
+							{{ active_form_end() }}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		
+		{% if mensaje_exito != '' %}
+			<div class="row">
+				<div class="col-lg-12 col-sm-12">
+					<div class="panel panel-success">
+						<div class="panel-heading">Exito !!
+							<div class="pull-right">
+								<a href="#" data-perform="panel-collapse">
+									<i class="ti-minus"></i></a> <a href="#" data-perform="panel-dismiss"><i class="ti-close"></i>
+								</a> 
+							</div>
+						</div>
+						<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<p>{{ mensaje_exito }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		
+		<div id="notificacion_campos" class="alert alert-danger alert-bold-border fade in alert-dismissable" style="display:none">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong>Hay un Error!</strong> Debe llenar todos los campos para agregar un nuevo notificacion a la BD.
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="white-box">
+					<h3 class="box-title m-b-0">Agregar Notificacion</h3>
+					<p class="text-muted m-b-20">Formulario para agregar un nuevo notificacion al sistema</p>
+				
+					{% set form = active_form_begin({
+						'id': 'form_agregar_modelo',
+						'options': {
+							'class': 'form-horizontal',
+						}
+					}) %}					
+						
+						
+						<div class="form-group">
+							<div class="col-md-12">
+								{{  form.field(modelo, 'identificador').textInput({'class': 'form-control', 'data-requerido': '1'}) | raw }}
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-md-12">
+								{{  form.field(modelo, 'contenido').textArea({'class': 'form-control summernote-lg', 'data-requerido': '1'}) | raw }}
+							</div>
+						</div>
+						
+						
+						<div class="text-right">
+							{% if editar == False %}
+								<button type="submit" class="btn btn-info">Agregar</button>
+							{% else %}
+								<button type="submit" class="btn btn-info">Guardar Cambios</button>
+							{% endif %}
+						</div>
+						
+					{{ active_form_end() }}
+
+				</div>
+			</div>
+		</div>
+    </div>
+    <!-- /.container-fluid -->
+{% endblock contenido %}
+
+{% block extra_js %}
+	<script>
+		$(function(){
+			// PARA ABRIR LAS OPCIONES DEL MENU
+			$('#menu-configuracion').addClass('selected');
+
+			{% if editar == false %}
+				// PARA EL TEXTO GENERICO DE LAS NOTIFICACIONES
+				$('#notificaciones-contenido').val('\
+				<tr> \
+					<td style="color: #767679; font-family:Trebuchet MS, sans-serif; font-size: 12px; line-height: 20px;" valign="top"> \
+						<p>Aqui va el texto informativo</p> \
+					</td> \
+				</tr> \
+				\
+				<tr> \
+					<td style="color: #767679; font-family:Trebuchet MS, sans-serif; font-size: 12px; line-height: 20px;" valign="top"> \
+						<p> \
+							<div><span style="font-weight:bold;color:#45392E">Variable1:</span> %%valor1%%</div> \
+							<div><span style="font-weight:bold;color:#45392E">Variable2:</span> %%valor2%%</div> \
+							<div><span style="font-weight:bold;color:#45392E">Variable3:</span> %%valor3%%</div>	\
+						</p> \
+					</td> \
+				</tr> \
+				');
+			{% endif %}
+			
+			/** BEGIN SUMMERNOTE **/
+			if ($('.summernote-lg').length > 0){
+				$('.summernote-lg').summernote({
+					height: 400,
+				});
+			}
+			
+			if ($('.summernote-sm').length > 0){
+				$('.summernote-sm').summernote({
+					height: 200,
+					  toolbar: [
+						//['style', ['style']], // no style button
+						['style', ['bold', 'italic', 'underline', 'clear']],
+						['font', ['strike']],
+						['fontsize', ['fontsize']],
+						['color', ['color']],
+						['para', ['ul', 'ol', 'paragraph']],
+						['height', ['height']],
+						//['insert', ['picture', 'link']], // no insert buttons
+						//['table', ['table']], // no table button
+						//['help', ['help']] //no help button
+					  ]
+				});
+			}
+			/** END SUMMERNOTE **/	
+		});		
+		
+		$('#form_agregar_modelo').submit(function(){
+			// PARA LOS CAMPOS CON SUMMERNOTE
+			$('#notificaciones-contenido').val($('#notificaciones-contenido').code());
+		
+			var error_campos = false;			
+			$('.form-control').each(function(campo){
+				if($("[name='" + this.name + "']").val() == '' && $("[name='" + this.name + "']").data('requerido') == 1){
+					$("[name='" + this.name + "']").parent().parent().addClass('has-error');						
+					error_campos = true;
+				}
+				else
+					$("[name='" + this.name + "']").parent().parent().removeClass('has-error');
+			});	
+						
+			if(error_campos){
+				$('#notificacion_campos').css('display', '');
+				return false;
+			}
+		});
+	</script>
+{% endblock extra_js %}

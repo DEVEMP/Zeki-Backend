@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+	<div class="container-fluid">
+		<!-- .row -->
+		<div class="row bg-title" style="background:url(/admin/plugins/images/heading-title-bg.jpg) no-repeat center center /cover;">
+			<div class="col-lg-12">
+				<h4 class="page-title">Agregar Libros</h4>
+			</div>
+		   
+			<div class="col-sm-12 col-md-12 col-xs-12">
+				<ol class="breadcrumb pull-left">
+					<li><a href="/admin">Inicio</a></li>
+					<li><a href="/admin/web/libros">Libros</a></li>
+					<li class="active">Agregar</li>
+				</ol>
+			</div>
+		</div>
+		<!-- /.row -->
+		
+		{% if mensaje_error != '' %}
+			<div class="row">
+				<div class="col-lg-12 col-sm-12">
+					<div class="panel panel-danger">
+						<div class="panel-heading">Error !!
+							<div class="pull-right">
+								<a href="#" data-perform="panel-collapse">
+									<i class="ti-minus"></i></a> <a href="#" data-perform="panel-dismiss"><i class="ti-close"></i>
+								</a> 
+							</div>
+						</div>
+						<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<p>{{ mensaje_error }}</p>
+							
+							{% set form_validation = active_form_begin() %}
+								<div>{{ form_validation.errorSummary(modelo) | raw }}</div>
+							{{ active_form_end() }}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		
+		{% if mensaje_exito != '' %}
+			<div class="row">
+				<div class="col-lg-12 col-sm-12">
+					<div class="panel panel-success">
+						<div class="panel-heading">Exito !!
+							<div class="pull-right">
+								<a href="#" data-perform="panel-collapse">
+									<i class="ti-minus"></i></a> <a href="#" data-perform="panel-dismiss"><i class="ti-close"></i>
+								</a> 
+							</div>
+						</div>
+						<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<p>{{ mensaje_exito }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		
+		<div id="notificacion_campos" class="alert alert-danger alert-bold-border fade in alert-dismissable" style="display:none">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong>Hay un Error!</strong> Debe llenar todos los campos para agregar un nuevo libro a la BD.
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="white-box">
+					<h3 class="box-title m-b-0">Agregar Libro</h3>
+					<p class="text-muted m-b-20">Formulario para agregar un nuevo libro al sistema</p>
+				
+					{% set form = active_form_begin({
+						'id': 'form_agregar_modelo',
+						'options': {
+							'class': '',
+							'enctype': 'multipart/form-data',
+						}
+					}) %}					
+						
+						<div class="row">
+							<div class="col-md-12">
+						
+								<div class="row">
+									<div class="col-md-8">
+										<div class="form-group">
+											{{  form.field(modelo, 'title').textInput({'class': 'form-control', 'data-requerido': '1'}) | raw }}
+										</div>
+										
+										<div class="form-group">
+											{{  form.field(modelo, 'content').textArea({'class': 'form-control', 'data-requerido': '1', 'rows': '5'}) | raw }}
+										</div>									
+									</div>
+									
+									<div class="col-md-4">
+										<div class="form-group">
+											{{  form.field(modelo, 'file').fileInput({'class': 'form-control', 'data-requerido': '1'}) | raw }}
+											
+											{% if modelo.file != '' %}
+												<div style="font-size: 11px;">
+													<a href="/media/libros/{{ modelo.file }}" target="_blank">{{ modelo.file }}</a>
+												</div>
+											{% endif %}
+										</div>
+										
+										<div class="form-group">
+											{{  form.field(modelo, 'magazine').textInput({'class': 'form-control', 'data-requerido': '0'}) | raw }}
+										</div>
+										
+										<div class="form-group">
+											{{  form.field(modelo, 'publication_date').textInput({'class': 'form-control', 'data-requerido': '0'}) | raw }}
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											{{  form.field(modelo, 'author').textArea({'class': 'form-control', 'data-requerido': '0', 'rows': '5'}) | raw }}
+										</div>
+										
+										<div class="form-group">
+											{{  form.field(modelo, 'abstract').textArea({'class': 'form-control', 'data-requerido': '0', 'rows': '5'}) | raw }}
+										</div>
+									</div>
+									
+									<div class="col-md-6">
+										<div class="form-group">
+											{{  form.field(modelo, 'keywords').textArea({'class': 'form-control', 'data-requerido': '0', 'rows': '5'}) | raw }}
+										</div>
+										
+										<div class="form-group">
+											{{  form.field(modelo, 'bibliography').textArea({'class': 'form-control', 'data-requerido': '0', 'rows': '5'}) | raw }}
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+							
+						
+						
+						<div class="text-right">
+							{% if editar == False %}
+								<a href="/admin/web/libros"><button type="button" class="btn btn-info">Regresar</button></a>
+								<button type="submit" class="btn btn-info">Agregar</button>
+							{% else %}
+								<a href="/admin/web/libros"><button type="button" class="btn btn-info">Regresar</button></a>
+								<button type="submit" class="btn btn-info">Guardar Cambios</button>
+							{% endif %}
+						</div>
+						
+					{{ active_form_end() }}
+
+				</div>
+			</div>
+		</div>
+		
+		
+    </div>
+    <!-- /.container-fluid -->
+{% endblock contenido %}
+
+{% block extra_js %}
+	<script>
+		$(function(){
+			// PARA ABRIR LAS OPCIONES DEL MENU
+			$('#menu-web').addClass('selected');
+
+			{% if editar == true %}
+				{% if modelo.publication_date != null and modelo.publication_date != '' %}
+					$('#libros-publication_date').val("{{ modelo.publication_date|date('d/m/Y') }}");
+				{% endif %}
+				
+				{% if modelo.file != '' %}
+					$('#libros-file').data('requerido', '0');
+				{% endif %}
+			{% endif %}
+			
+			$('#libros-publication_date').datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'dd/mm/yyyy',
+			});
+		});		
+		
+		$('#form_agregar_modelo').submit(function(){
+			var error_campos = false;			
+			$('.form-control').each(function(campo){
+				if($(this).val() == '' && $(this).data('requerido') == 1){
+					$(this).parent().parent().addClass('has-error');						
+					error_campos = true;
+				}
+				else
+					$(this).parent().parent().removeClass('has-error');
+			});	
+			
+			if(error_campos){
+				$('#notificacion_campos').css('display', '');
+				return false;
+			}
+		});
+	</script>
+{% endblock extra_js %}

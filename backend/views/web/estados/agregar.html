@@ -1,0 +1,842 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+	<div class="container-fluid">
+		<!-- .row -->
+		<div class="row bg-title" style="background:url(/admin/plugins/images/heading-title-bg.jpg) no-repeat center center /cover;">
+			<div class="col-lg-12">
+				<h4 class="page-title">Agregar Estados</h4>
+			</div>
+		   
+			<div class="col-sm-12 col-md-12 col-xs-12">
+				<ol class="breadcrumb pull-left">
+					<li><a href="/admin">Inicio</a></li>
+					<li><a href="/admin/web/estados">Estados</a></li>
+					<li class="active">Agregar</li>
+				</ol>
+			</div>
+		</div>
+		<!-- /.row -->
+		
+		{% if mensaje_error != '' %}
+			<div class="row">
+				<div class="col-lg-12 col-sm-12">
+					<div class="panel panel-danger">
+						<div class="panel-heading">Error !!
+							<div class="pull-right">
+								<a href="#" data-perform="panel-collapse">
+									<i class="ti-minus"></i></a> <a href="#" data-perform="panel-dismiss"><i class="ti-close"></i>
+								</a> 
+							</div>
+						</div>
+						<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<p>{{ mensaje_error }}</p>
+							
+							{% set form_validation = active_form_begin() %}
+								<div>{{ form_validation.errorSummary(modelo) | raw }}</div>
+							{{ active_form_end() }}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		
+		{% if mensaje_exito != '' %}
+			<div class="row">
+				<div class="col-lg-12 col-sm-12">
+					<div class="panel panel-success">
+						<div class="panel-heading">Exito !!
+							<div class="pull-right">
+								<a href="#" data-perform="panel-collapse">
+									<i class="ti-minus"></i></a> <a href="#" data-perform="panel-dismiss"><i class="ti-close"></i>
+								</a> 
+							</div>
+						</div>
+						<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<p>{{ mensaje_exito }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		
+		<div id="notificacion_campos" class="alert alert-danger alert-bold-border fade in alert-dismissable" style="display:none">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong>Hay un Error!</strong> Debe llenar todos los campos para agregar un nuevo estado a la BD.
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="white-box">
+					<h3 class="box-title m-b-0">Agregar Estado</h3>
+					<p class="text-muted m-b-20">Formulario para agregar un nuevo estado al sistema</p>
+				
+					{% set form = active_form_begin({
+						'id': 'form_agregar_modelo',
+						'options': {
+							'class': '',
+						}
+					}) %}					
+						
+						<div class="row">
+							<div class="col-md-7">
+							
+								<div class="row">
+									<div class="col-md-8">
+										<div class="form-group">
+											{{  form.field(modelo, 'estado').textInput({'class': 'form-control', 'data-requerido': '1'}) | raw }}
+										</div>
+									</div>
+									
+									<div class="col-md-4">
+										<div class="form-group">
+											{{  form.field(modelo, 'tipo_estado').dropDownList({
+												'': 'Seleccione una opcion',
+												'Mensaje': 'Mensaje',
+												'Busqueda': 'Busqueda',
+											}, {'class': 'form-control', 'data-requerido': '1'}) | raw }}
+										</div>
+									</div>
+								</div>
+
+							</div>
+							
+							<div class="col-md-5">
+								<div class="form-group">
+									{{  form.field(modelo, 'palabras_claves_esp').textArea({'class': 'form-control', 'data-requerido': '0', 'rows': '2'}) | raw }}
+								</div>
+								
+								<div class="form-group">
+									{{  form.field(modelo, 'palabras_claves_eng').textArea({'class': 'form-control', 'data-requerido': '0', 'rows': '2'}) | raw }}
+								</div>
+								
+								<div class="form-group">
+									{{  form.field(modelo, 'palabras_claves_tur').textArea({'class': 'form-control', 'data-requerido': '0', 'rows': '2'}) | raw }}
+								</div>
+							</div>
+						</div>
+							
+						
+						
+						<div class="text-right">
+							{% if editar == False %}
+								<a href="/admin/web/estados"><button type="button" class="btn btn-info">Regresar</button></a>
+								<button type="submit" class="btn btn-info">Agregar</button>
+							{% else %}
+								<a href="/admin/web/estados"><button type="button" class="btn btn-info">Regresar</button></a>
+								<button type="submit" class="btn btn-info">Guardar Cambios</button>
+							{% endif %}
+						</div>
+						
+					{{ active_form_end() }}
+
+				</div>
+			</div>
+		</div>
+		
+		
+		{% if editar == true %}
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="white-box">
+						<h3 class="box-title m-b-20">Mensajes del Estado</h3>
+					
+						
+						<div class="pull-left text-left m-b-sm" style="margin-top: 10px;">
+							<span id="cantidad_modelos">0</span> registros en total
+						</div>
+						
+						<div class="pull-right text-right m-b-sm" style="margin-bottom: 10px;">
+							<a id="reiniciar_filtros" href="javascript:;"><button class="btn btn-sm btn-info">Reiniciar Filtros</button></a>
+							<a id="filtrar_resultados" href="javascript:;"><button class="btn btn-sm btn-warning">Filtrar Resultados</button></a>
+						</div>
+						<div class="clearfix"></div>
+						
+					
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>
+											Mensaje
+											<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="mensaje ASC"><i class="fa fa-arrow-up"></i></a>
+											<a href="javascript:;" class="cambiar_orden" style="color: #b1b1b1;" data-orden="mensaje DESC"><i class="fa fa-arrow-down"></i></a>
+										</th>
+										
+										<th class="text-nowrap" style="width:52px;"></th>
+									</tr>
+								</thead>
+								
+								<tbody id="tabla">
+
+								</tbody>
+								
+							</table>
+							
+							<div id="paginacion" class="text-center">
+
+							</div>
+						</div>
+					
+						<div class="text-right">
+							<a href="javascript:;"><button class="btn btn-info agregar-estadomensaje" type="button">Agregar Mensaje</button></a>
+						</div>
+					
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		
+		
+		<!-- MODAL ELIMINAR -->
+		<div class="modal fade" id="modal_eliminar" tabindex="-1" role="dialog" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Eliminar Registro</h4>
+			  </div>
+			  <div class="modal-body">
+				Esta estadopersona que desea eliminar el registro: <strong id="etiqueta_registro"></strong>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+				<button id="boton_eliminar" type="button" class="btn btn-danger" data-id="">Eliminar</button>
+			  </div><!-- /.modal-footer -->
+			</div><!-- /.modal-content -->
+		  </div><!-- /.modal-doalog -->
+		</div><!-- /#DefaultModal -->
+		
+		
+		<!-- MODAL PERSONAS -->
+		<div class="modal fade" id="modal_estadosmensajes" tabindex="-1" role="dialog" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 id="modal_estadosmensajes_titulo" class="modal-title">Modal EstadosMensajes Titulo</h4>
+				</div>
+				<div id="modal_estadosmensajes_body" class="modal-body">
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+					<button id="boton_continuar_estadosmensajes" type="button" class="btn btn-success" data-id="">Boton Continuar</button>
+				</div><!-- /.modal-footer -->
+			</div><!-- /.modal-content -->
+		  </div><!-- /.modal-doalog -->
+		</div><!-- /#DefaultModal -->
+		
+    </div>
+    <!-- /.container-fluid -->
+{% endblock contenido %}
+
+{% block extra_js %}
+	<script>
+		var color_orden_activo = '#5c99c0';
+		var color_orden_inactivo = '#b1b1b1';
+		
+		var pagina_actual = 1;
+				
+		var filtro_id = '';
+		var filtro_estado = '';
+		var filtro_mensaje = '';
+		
+		var orden_campo = 'id DESC';
+		
+		var estado_actual = ''
+		
+		$(function(){
+			// PARA ABRIR LAS OPCIONES DEL MENU
+			$('#menu-web').addClass('selected');
+
+			{% if mensaje_flash != '' %}
+				$.toast({
+					text: '{{ mensaje_flash }}',
+					position: 'top-right',
+					loaderBg:'#ff6849',
+					icon: 'success',
+					hideAfter: 3000, 
+					stack: 6
+				});
+			{% endif %}
+			
+			{% if editar == true %}
+				estado_actual = '{{ modelo.id }}';
+				
+				cargar_listado_estadosmensajes();
+			{% endif %}
+			
+		});		
+		
+		
+		$('#form_agregar_modelo').submit(function(){
+			var error_campos = false;			
+			$('.form-control').each(function(campo){
+				if($(this).val() == '' && $(this).data('requerido') == 1){
+					$(this).parent().parent().addClass('has-error');						
+					error_campos = true;
+				}
+				else
+					$(this).parent().parent().removeClass('has-error');
+			});	
+			
+
+			if(error_campos){
+				$('#notificacion_campos').css('display', '');
+				return false;
+			}
+		});
+		
+		/* PARA LAS FUNCIONES DE LISTAR PERSONAS */
+		
+		$('body').on('click', '.cambiar_pagina', function(){
+			pagina_actual = $(this).data('pagina');
+			cargar_listado_estadosmensajes();
+		});
+		
+		$('body').on('click', '.eliminar_registro', function(){
+			id = $(this).data('id');
+			etiqueta = $(this).data('etiqueta');
+			
+			$('#etiqueta_registro').text(etiqueta);
+			$('#boton_eliminar').data('id', id);
+			$('#modal_eliminar').modal('toggle');
+		});
+		
+		$('#boton_eliminar').click(function(){
+			eliminar_registro(id);
+			$('#modal_eliminar').modal('toggle');
+		});
+		
+		$('body').on('click', '.cambiar_orden', function(){
+			orden_campo = $(this).data('orden');
+			
+			
+			// PARA REINICIAR EL COLOR DE LOS BOTONES
+			$('.cambiar_orden').css('color', color_orden_inactivo);
+			$('.cambiar_orden').each(function(index, value){
+				if($(this).data('orden') == orden_campo)
+					$(this).css('color', color_orden_activo);
+			});
+			
+			cargar_listado_estadosmensajes();
+		});
+		
+		$('#reiniciar_filtros').click(function(){			
+			$('#filtrar_resultados').trigger('click');
+		});
+		
+		$('#filtrar_resultados').click(function(){			
+			filtro_estado = '{{ modelo.id }}';
+
+			pagina_actual = 1;
+			
+			cargar_listado_estadosmensajes();
+		});
+		
+		function cargar_listado_estadosmensajes(){
+			$.ajax({
+				url: '/admin/web/estadosmensajes/listado-ajax',
+				method: 'POST',
+				data: {
+					'{{ app.request.csrfParam }}': '{{ app.request.csrfToken }}',
+					'pagina_actual': pagina_actual,
+										
+					'filtro_id': filtro_id,
+					'filtro_estado': estado_actual,
+					'filtro_mensaje': filtro_mensaje,
+					
+					'orden_campo': orden_campo,
+				},
+				timeout: 20000,
+				beforeSend: function(){
+					console.log('Cargando el listado de registros via ajax...');
+					
+					$('#tabla').html('');
+					$('#paginacion').html('');
+					
+					$('#tabla').append(' \
+						<tr> \
+							<td colspan="2">Cargando el listado de registros...</td> \
+						</tr> \
+					');
+				},
+				success: function(data){					
+					$('#tabla').html('');
+					$('#paginacion').html('');
+					
+					$('#cantidad_modelos').text(data.cantidad_modelos);
+					
+					console.log(data);
+					
+					if(data.cantidad_modelos > 0){
+						$.each(data.listado_modelos, function(index, valor){							
+
+							$('#tabla').append(' \
+								<tr> \
+									<td>' + valor.mensaje + '</td> \
+									\
+									<td> \
+										<a href="javascript:;" data-toggle="tooltip" data-original-title="Editar" class="text-muted editar-estadomensaje" style="padding-right:5px" data-id="' + valor.id + '" data-mensaje="' + valor.mensaje + '"> <i class="fa fa-pencil"></i> </a> \
+										<a href="javascript:;" data-toggle="tooltip" data-original-title="Eliminar" data-id="' + valor.id + '"  data-mensaje="' + valor.mensaje + '" class="text-danger eliminar-estadomensaje" style="padding-right:5px"> <i class="fa fa-times"></i> </a> \
+									</td> \
+								</tr> \
+							');
+						});
+						
+						if(data.cantidad_paginas > 1){
+							var pagina_actual = parseInt(data.pagina_actual);
+							var pagina_anterior = pagina_actual <= 1 ? 1 : pagina_actual - 1;
+							var pagina_siguiente = pagina_actual >= parseInt(data.cantidad_paginas) ? parseInt(data.cantidad_paginas) : pagina_actual + 1;
+
+							
+							$('#paginacion').html(' \
+								<ul class="pagination"> \
+								</ul> \
+							');							
+							
+							
+							$('#paginacion .pagination').append(' \
+								<li class="cambiar_pagina" data-pagina="1"><a href="javascript:;"><i class="fa fa-angle-double-left"></i></a></li> \
+							');
+							
+							$('#paginacion .pagination').append(' \
+								<li class="cambiar_pagina" data-pagina="' + pagina_anterior + '"><a href="javascript:;"><i class="fa fa-angle-left"></i></a></li> \
+							');
+							
+							if(pagina_actual > 3){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + (pagina_anterior - 2) + '"><a href="javascript:;">' + (pagina_anterior - 2) + '</a></li> \
+								');
+							}
+							
+							if(pagina_actual > 2){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + (pagina_anterior - 1) + '"><a href="javascript:;">' + (pagina_anterior - 1) + '</a></li> \
+								');
+							}
+							
+							if(pagina_actual > 1){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + pagina_anterior + '"><a href="javascript:;">' + pagina_anterior + '</a></li> \
+								');
+							}
+							
+							$('#paginacion .pagination').append(' \
+								<li class="active"><a href="javascript:;">' + pagina_actual + '</a></li> \
+							');
+							
+							if(pagina_actual < parseInt(data.cantidad_paginas)){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + pagina_siguiente + '"><a href="javascript:;">' + pagina_siguiente + '</a></li> \
+								');
+							}
+							
+							if(pagina_actual < (parseInt(data.cantidad_paginas) - 1)){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + (pagina_siguiente + 1) + '"><a href="javascript:;">' + (pagina_siguiente + 1) + '</a></li> \
+								');
+							}
+							
+							if(pagina_actual < (parseInt(data.cantidad_paginas) - 2)){
+								$('#paginacion .pagination').append(' \
+									<li class="cambiar_pagina" data-pagina="' + (pagina_siguiente + 2) + '"><a href="javascript:;">' + (pagina_siguiente + 2) + '</a></li> \
+								');
+							}
+							
+							$('#paginacion .pagination').append(' \
+								<li class="cambiar_pagina" data-pagina="' + pagina_siguiente + '"><a href="javascript:;"><i class="fa fa-angle-right"></i></a></li> \
+							');
+							
+							$('#paginacion .pagination').append(' \
+								<li class="cambiar_pagina" data-pagina="' + data.cantidad_paginas + '"><a href="javascript:;"><i class="fa fa-angle-double-right"></i></a></li> \
+							');
+							
+						}
+					}
+					else{
+						$('#tabla').append(' \
+							<tr> \
+								<td colspan="2">No existen mensajes para este estado...</td> \
+							</tr> \
+						');
+					}
+				},
+				error: function(x, t, m) {
+					if(t === "timeout") {
+						alert('El servidor ha tardado mucho en dar respuesta a la solicitud...');
+						console.log('El servidor ha tardado mucho en dar respuesta a la solicitud...');
+					} else {
+						alert('Ha ocurrido un error inesperado al intentar cargar los registros...');
+						console.log('Ha ocurrido un error inesperado al intentar cargar los registros...');
+					}
+				}
+			});
+		}
+		
+		
+		
+		/* PARA LAS FUNCIONES DE AGREGAR ACCIONES */
+		$('body').on('click', '.agregar-estadomensaje', function(){
+			$('#modal_estadosmensajes').modal('toggle');
+			
+			$('#modal_estadosmensajes_titulo').text('Agregar Mensaje al Estado');
+			$('#modal_estadosmensajes_body').html(' \
+				<div class="row"> \
+					<div class="col-md-12"> \
+						<div class="estadosmensajes-notificacion alert alert-danger alert-bold-border in alert-dismissable" style="display:none"> \
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> \
+							<strong>Hay un Error!</strong> Debe llenar todos los campos para agregar un nuevo mensaje al estado. \
+						</div> \
+						\
+						<div class="row"> \
+							<div class="col-md-12"> \
+								<div class="form-group"> \
+									<div class="form-group"> \
+										<label class="control-label">Mensaje</label> \
+										<select class="form-control estadosmensajes" data-campo="estadosmensajes-mensaje" data-requerido="1" aria-required="true"> \
+											<option value="">Seleccione una opcion</option> \
+											{% for mensaje in listado_mensajes %} \
+												{% autoescape "js" %}<option value="{{ mensaje.id }}">{{ mensaje.mensaje_esp }}</option>{% endautoescape %} \
+											{% endfor %} \
+										</select>\
+									</div> \
+								</div> \
+							</div> \
+						</div> \
+					</div> \
+				</div> \
+			');
+			
+			$('#boton_continuar_estadosmensajes').text('Agregar Mensaje');
+			$('#boton_continuar_estadosmensajes').data('funcion', 'Agregar');
+		});
+		
+		$('body').on('click', '.editar-estadomensaje', function(){
+			$('#modal_estadosmensajes').modal('toggle');
+			
+			var id_valor = $(this).data('id');
+			var mensaje_valor = $(this).data('mensaje');
+			
+			$('#modal_estadosmensajes_titulo').text('Editar Mensaje del Estado');
+			$('#modal_estadosmensajes_body').html(' \
+				<div class="row"> \
+					<div class="col-md-12"> \
+						<div class="estadosmensajes-notificacion alert alert-danger alert-bold-border in alert-dismissable" style="display:none"> \
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> \
+							<strong>Hay un Error!</strong> Debe llenar todos los campos para agregar un nuevo mensaje al estado. \
+						</div> \
+						\
+						<div class="row"> \
+							<div class="col-md-12"> \
+								<div class="form-group"> \
+									<div class="form-group"> \
+										<label class="control-label">Mensaje</label> \
+										<select class="form-control estadosmensajes" data-campo="estadosmensajes-mensaje" data-requerido="1" aria-required="true"> \
+											<option value="">Seleccione una opcion</option> \
+											{% for mensaje in listado_mensajes %} \
+												{% autoescape "js" %}<option value="{{ mensaje.id }}">{{ mensaje.mensaje_esp }}</option>{% endautoescape %} \
+											{% endfor %} \
+										</select>\
+									</div> \
+								</div> \
+							</div> \
+						</div> \
+					</div> \
+				</div> \
+			');
+			
+			$('.form-control.estadosmensajes').each(function(){
+				if($(this).data('campo') == 'estadosmensajes-mensaje'){
+					$(this).find('option').each(function(){
+						if($(this).text() == mensaje_valor){
+							$(this).attr('selected', true);
+						}
+					});
+				}
+			});
+			
+			$('#boton_continuar_estadosmensajes').text('Editar Mensaje');
+			$('#boton_continuar_estadosmensajes').data('funcion', 'Editar');
+			$('#boton_continuar_estadosmensajes').data('id', id_valor);
+		});
+		
+		$('body').on('click', '.eliminar-estadomensaje', function(){
+			$('#modal_estadosmensajes').modal('toggle');
+			
+			var id_valor = $(this).data('id');
+			var mensaje = $(this).data('mensaje');
+			
+			$('#modal_estadosmensajes_titulo').text('Eliminar Mensaje del Estado');
+			$('#modal_estadosmensajes_body').html(' \
+				<div class="row"> \
+					<div class="col-md-12"> \
+						<div class="estadosmensajes-notificacion alert alert-danger alert-bold-border in" style="display:"> \
+							¿Realmente desea eliminar el mensaje <strong>' + mensaje + '</strong> del estado actual? \
+						</div> \
+					</div> \
+				</div> \
+			');
+			
+			$('#boton_continuar_estadosmensajes').text('Eliminar Mensaje');
+			$('#boton_continuar_estadosmensajes').data('funcion', 'Eliminar');
+			$('#boton_continuar_estadosmensajes').data('id', id_valor);
+		});
+		
+		$('#boton_continuar_estadosmensajes').click(function(){
+			var data_funcion = $(this).data('funcion');
+			
+			if(data_funcion == 'Agregar'){
+				// PARA VALIDAR LOS CAMPOS
+				
+				$('.estadosmensajes-notificacion').hide();
+				var error_campos = false;			
+				$('.mensajes').each(function(campo){
+					if($(this).val() == '' && $(this).data('requerido') == 1){
+						$(this).parent().parent().addClass('has-error');						
+						error_campos = true;
+					}
+					else
+						$(this).parent().parent().removeClass('has-error');
+				});	
+							
+				if(error_campos){
+					$('.estadosmensajes-notificacion').show();
+				}
+				else{
+					var mensaje_valor = '';
+					
+					$('.estadosmensajes').each(function(){
+						if($(this).data('campo') == 'estadosmensajes-mensaje'){
+							mensaje_valor = $(this).val();
+						}
+					});
+					
+					$.ajax({
+						url: '/admin/web/estadosmensajes/agregar-ajax',
+						method: 'POST',
+						data: {
+							'{{ app.request.csrfParam }}': '{{ app.request.csrfToken }}',
+							'estado': estado_actual,
+							'mensaje': mensaje_valor,
+						},
+						timeout: 20000,
+						beforeSend: function(){
+							console.log('Agregando el mensaje via ajax...');
+						},
+						success: function(data){					
+							console.log(data);
+							
+							if(data.codigo == '1'){
+								$.toast({
+									heading: 'Exito !!',
+									text: data.mensaje,
+									position: 'top-right',
+									loaderBg:'#ff6849',
+									icon: 'success',
+									hideAfter: 3000, 
+									stack: 6
+								});
+								
+								pagina_actual = 1;
+								
+								cargar_listado_estadosmensajes();
+								
+								$('#modal_estadosmensajes').modal('toggle');
+							}
+							else{
+								$.toast({
+									heading: 'Error !!',
+									text: data.mensaje + '. Codigo: ' + data.codigo,
+									position: 'top-right',
+									loaderBg:'#ff6849',
+									icon: 'error',
+									hideAfter: 3000, 
+									stack: 6
+								});
+								
+								pagina_actual = 1;
+								
+								cargar_listado_estadosmensajes();
+								
+								$('#modal_estadosmensajes').modal('toggle');
+							}
+						},
+						error: function(x, t, m) {
+							if(t === "timeout") {
+								alert('El servidor ha tardado mucho en agregar el mensaje...');
+								console.log('El servidor ha tardado mucho en agregar el mensaje...');
+							} else {
+								alert('Ha ocurrido un error inesperado al intentar agregar el mensaje...');
+								console.log('Ha ocurrido un error inesperado al intentar agregar el mensaje...');
+							}
+						}
+					});
+				}
+			}
+			
+			if(data_funcion == 'Editar'){
+				// PARA VALIDAR LOS CAMPOS
+				
+				$('.estadosmensajes-notificacion').hide();
+				var error_campos = false;			
+				$('.estadosmensajes').each(function(campo){
+					if($(this).val() == '' && $(this).data('requerido') == 1){
+						$(this).parent().parent().addClass('has-error');						
+						error_campos = true;
+					}
+					else
+						$(this).parent().parent().removeClass('has-error');
+				});	
+							
+				if(error_campos){
+					$('.estadosmensajes-notificacion').show();
+				}
+				else{
+					var id_valor = $('#boton_continuar_estadosmensajes').data('id');
+					var mensaje_valor = '';
+					
+					$('.estadosmensajes').each(function(){
+						if($(this).data('campo') == 'estadosmensajes-mensaje'){
+							mensaje_valor = $(this).val();
+						}
+					});
+					
+					$.ajax({
+						url: '/admin/web/estadosmensajes/editar-ajax',
+						method: 'POST',
+						data: {
+							'{{ app.request.csrfParam }}': '{{ app.request.csrfToken }}',
+							'id': id_valor,
+							'estado': estado_actual,
+							'mensaje': mensaje_valor,							
+						},
+						timeout: 20000,
+						beforeSend: function(){
+							console.log('Editando el mensaje via ajax...');
+						},
+						success: function(data){					
+							console.log(data);
+							
+							if(data.codigo == '1'){
+								$.toast({
+									heading: 'Exito !!',
+									text: data.mensaje,
+									position: 'top-right',
+									loaderBg:'#ff6849',
+									icon: 'success',
+									hideAfter: 3000, 
+									stack: 6
+								});
+								
+								pagina_actual = 1;
+								
+								cargar_listado_estadosmensajes();
+								
+								$('#modal_estadosmensajes').modal('toggle');
+							}
+							else{
+								$.toast({
+									heading: 'Error !!',
+									text: data.mensaje + '. Codigo: ' + data.codigo,
+									position: 'top-right',
+									loaderBg:'#ff6849',
+									icon: 'error',
+									hideAfter: 3000, 
+									stack: 6
+								});
+								
+								pagina_actual = 1;
+								
+								cargar_listado_estadosmensajes();
+								
+								$('#modal_estadosmensajes').modal('toggle');
+							}
+						},
+						error: function(x, t, m) {
+							if(t === "timeout") {
+								alert('El servidor ha tardado mucho en editar el mensajo...');
+								console.log('El servidor ha tardado mucho en editar el mensaje...');
+							} else {
+								alert('Ha ocurrido un error inesperado al intentar editar el mensaje...');
+								console.log('Ha ocurrido un error inesperado al intentar editar el mensaje...');
+							}
+						}
+					});
+				}
+			}
+			
+			if(data_funcion == 'Eliminar'){
+				// PARA VALIDAR LOS CAMPOS
+				var id_valor = $('#boton_continuar_estadosmensajes').data('id');
+				
+				$.ajax({
+					url: '/admin/web/estadosmensajes/eliminar-ajax',
+					method: 'POST',
+					data: {
+						'{{ app.request.csrfParam }}': '{{ app.request.csrfToken }}',
+						'id': id_valor,
+					},
+					timeout: 20000,
+					beforeSend: function(){
+						console.log('Eliminando el mensaje via ajax...');
+					},
+					success: function(data){					
+						console.log(data);
+						
+						if(data.codigo == '1'){
+							$.toast({
+								heading: 'Exito !!',
+								text: data.mensaje,
+								position: 'top-right',
+								loaderBg:'#ff6849',
+								icon: 'success',
+								hideAfter: 3000, 
+								stack: 6
+							});
+							
+							pagina_actual = 1;
+							
+							cargar_listado_estadosmensajes();
+							
+							$('#modal_estadosmensajes').modal('toggle');
+						}
+						else{
+							$.toast({
+								heading: 'Error !!',
+								text: data.mensaje + '. Codigo: ' + data.codigo,
+								position: 'top-right',
+								loaderBg:'#ff6849',
+								icon: 'error',
+								hideAfter: 3000, 
+								stack: 6
+							});
+							
+							pagina_actual = 1;
+							
+							cargar_listado_estadosmensajes();
+							
+							$('#modal_estadosmensajes').modal('toggle');
+						}
+					},
+					error: function(x, t, m) {
+						if(t === "timeout") {
+							alert('El servidor ha tardado mucho en eliminar el mensaje...');
+							console.log('El servidor ha tardado mucho en eliminar el mensaje...');
+						} else {
+							alert('Ha ocurrido un error inesperado al intentar eliminar el mensaje...');
+							console.log('Ha ocurrido un error inesperado al intentar eliminar el mensaje...');
+						}
+					}
+				});
+			}
+		});
+		
+		
+		
+	</script>
+{% endblock extra_js %}

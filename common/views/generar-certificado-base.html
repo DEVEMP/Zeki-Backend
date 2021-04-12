@@ -1,0 +1,62 @@
+{{ this.beginPage() }}
+<!DOCTYPE html>
+<html class="wide wow-animation smoothscroll" lang="es" xmlns:og='http://ogp.me/ns#' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+	<meta charset="utf-8">
+	<!-- Site Title-->
+	<title>{% block titulo %}{% endblock titulo %}</title>
+	<meta name="description" content="">
+	<meta name="abstract" content="">
+	<link rel="canonical" href="">
+	<meta name="distribution" content="global">
+	<meta name="author" content="">
+	<meta name="copyright" content="">
+	
+	
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+
+	<link rel="icon" href="/images/favicon.png" type="image/png">
+	<!-- Stylesheets-->
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Libre+Franklin:200,300,500,600,300italic">
+	<link rel="stylesheet" id="bloomy-google-font-css" href="http://fonts.googleapis.com/css?family=Abel:300,400,500,600,700,800" type="text/css" media="all">
+	<link rel="stylesheet" href="{{ url_sitio }}/css/bootstrap.css">
+	<link rel="stylesheet" href="{{ url_sitio }}/css/style.css">
+	
+	{{ this.head() }}
+	
+	<!--[if lt IE 10]>
+	<div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="https://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
+	<script src="js/html5shiv.min.js"></script>
+	<![endif]-->
+	
+	
+	{% block extra_css %}{% endblock extra_css %}
+</head>
+
+{{ this.beginBody() }}
+<body>
+	
+		
+	{% block contenido %} {% endblock contenido %}
+	
+	{% block contenido_extra %} {% endblock contenido_extra %}
+    
+	
+
+    <script src="{{ url_sitio }}/js/jquery-3.3.1.min.js"></script>
+	<script src="{{ url_sitio }}/js/bootstrap.js"></script>
+	
+	<script>
+		$(document).ready(function(){
+			
+		});
+		
+		
+	</script>
+	{% block extra_js %}{% endblock extra_js %}
+	
+{{ this.endBody() }}
+</body>
+</html>

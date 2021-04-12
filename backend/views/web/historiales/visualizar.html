@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+	<style>
+		.contenedor_mensajes{
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 20px;
+		}
+		
+		.mensaje{
+			max-width: 50%;
+			margin-bottom: 20px;
+		}
+		
+		.mensaje.mensaje_chatbot{
+			background: #dbdbf3;
+			padding: 20px;
+			border-radius: 10px;
+			align-self: start;
+		}
+		
+		.mensaje.mensaje_medico{
+			background: #dbf3dd;
+			padding: 20px;
+			border-radius: 10px;
+			text-align: right;
+			align-self: end;
+		}
+		
+		.mensaje .titulo{
+			font-weight: bold;
+			margin-bottom: 20px;
+		}
+		
+		.mensaje.mensaje_chatbot .titulo{
+			color: #696980;	
+		}
+		
+		.mensaje.mensaje_medico .titulo{
+			color: #6c866f;
+		}
+		
+		.mensaje .fecha{
+			text-align: right;
+			margin-top: 20px;
+			font-size: 11px;
+			font-style: italic;
+		}
+	</style>
+{% endblock extra_css %}
+
+{% block contenido %}
+	<div class="container-fluid">
+		<!-- .row -->
+		<div class="row bg-title" style="background:url(/admin/plugins/images/heading-title-bg.jpg) no-repeat center center /cover;">
+			<div class="col-lg-12">
+				<h4 class="page-title">Visualizar Conversacion</h4>
+			</div>
+		   
+			<div class="col-sm-12 col-md-12 col-xs-12">
+				<ol class="breadcrumb pull-left">
+					<li><a href="/admin">Inicio</a></li>
+					<li><a href="/admin/web/historiales">Historiales</a></li>
+					<li class="active">Visualizar Conversacion</li>
+				</ol>
+			</div>
+		</div>
+		<!-- /.row -->
+		
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="white-box">
+					<h3 class="box-title m-b-0">Visualizar Conversacion</h3>
+					<p class="text-muted m-b-20">Conversacion <strong>{{ modelo.identificador }}</strong> realizada con el medico <strong>{{ modelo.medico0.nombre }} {{ modelo.medico0.apellido }}</strong></p>
+				
+				
+					<div class="contenedor_mensajes">
+						{% for historial in listado_historiales %}
+							
+							{% if historial.tipo_mensaje == 'Chatbot' %}
+								
+								<div class="mensaje mensaje_chatbot">
+									<div class="titulo">Chatbot</div>
+									<div class="contenido">{{ historial.mensaje }}</div>
+									<div class="fecha">{{ historial.fecha_mensaje|date("d/m/Y H:i:s") }}</div>
+								</div>
+								
+							{% else %}
+								
+								<div class="mensaje mensaje_medico">
+									<div class="titulo">{{ modelo.medico0.nombre }} {{ modelo.medico0.apellido }}</div>
+									<div class="contenido">{{ historial.mensaje }}</div>
+									<div class="fecha">{{ historial.fecha_mensaje|date("d/m/Y H:i:s") }}</div>
+								</div>
+								
+							{% endif %}
+							
+						{% endfor %}
+					</div>
+				
+				
+					<div class="text-right">
+						<a href="/admin/web/historiales"><button type="button" class="btn btn-info">Regresar</button></a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		
+		
+    </div>
+    <!-- /.container-fluid -->
+{% endblock contenido %}
+
+{% block extra_js %}
+	<script>
+		$(function(){
+			// PARA ABRIR LAS OPCIONES DEL MENU
+			$('#menu-web').addClass('selected');
+		});		
+		
+	</script>
+{% endblock extra_js %}

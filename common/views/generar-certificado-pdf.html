@@ -1,0 +1,30 @@
+{% extends "generar-certificado-base.html" %}
+
+{% block titulo %}CERT{{ medicoexamen.codigo }}{% endblock titulo %}
+
+{% block contenido %}
+	
+	<div class="certificado-frente">
+		
+		<img class="imagen-fondo" src="{{ url_sitio }}/media/imagenes/{{ imagen_fondo_frente }}" />
+		<div class="contenido">
+			<h3>Otorga el presente Certificado a</h3>
+			<h1>"{{ medico }}"</h1>
+			<h4>por haber aprobado satisfactoriamente<br/>
+				la evaluacion del tema
+			</h4>
+			<h2>"{{ examen }}"</h2>
+			<h6>Profesión:</h6>
+			<h5>"{{ especialidad }}"</h5>
+			<h6>Cédula Profesional:</h6>
+			<h5>"{{ cedula_profesional }}"</h5>
+		</div>
+	</div>
+	
+	<div class="certificado-reverso" style="background-image: url({{ url_sitio }}/media/imagenes/{{ imagen_fondo_reverso }})">
+		<div class="contenido">
+			<img src="{{ url_sitio }}/media/imagenes/{{ imagen_logo_reverso }}" />
+		</div>
+	</div>
+		
+{% endblock contenido %}

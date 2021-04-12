@@ -1,0 +1,259 @@
+{{ this.beginPage() }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="Audioemoticones">
+	<link rel="icon" type="image/png" sizes="16x16" href="//admin/images/favicon.png">
+	<title>Backend - {{ app.params.name }}</title>
+	<link href="/admin/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/admin/plugins/bower_components/toast-master/css/jquery.toast.css" rel="stylesheet">
+	<link href="/admin/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
+	<link href="/admin/plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" />
+	<link href="/admin/plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" />
+	<link href="/admin/plugins/bower_components/summernote/summernote.min.css" rel="stylesheet">
+	<link href="/admin/plugins/bower_components/dropzone/dist/dropzone.css" rel="stylesheet" />
+	<link href="/admin/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" />
+	<link href="/admin/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css" rel="stylesheet" />
+	<link href="/admin/plugins/bower_components/jquery-asColorPicker-master/css/asColorPicker.css" rel="stylesheet" />
+	<link href="/admin/css/colors/default.css" id="theme"  rel="stylesheet">		
+	<link href="/admin/css/animate.css" rel="stylesheet">
+	<link href="/admin/css/style.css" rel="stylesheet">
+	<link href="/admin/css/colors/default.css" id="theme"  rel="stylesheet">
+
+	{{ this.head() }}
+	
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	{% block extra_css %} {% endblock extra_css %}
+</head>
+
+{{ this.beginBody() }}
+<body class="fix-header">
+	<!-- Preloader -->
+	<div class="preloader">
+	  <div class="cssload-speeding-wheel"></div>
+	</div>
+
+	<div id="wrapper">
+		<!-- Top Navigation -->
+		<nav class="navbar navbar-default navbar-static-top m-b-0">
+			<div class="navbar-header">
+
+				<!-- .Logo -->
+				<div class="top-left-part">
+					<a class="logo" href="/{{ app.params.url_admin }}">
+						<!-- <img src="/admin/images/logo.png" alt="home" class="light-logo" /> -->
+						<i class="linea-icon linea-basic" data-icon="&#xE01B;"></i>
+					</a>
+				</div>
+				
+				<ul class="nav navbar-top-links navbar-left hidden-xs">
+					<li>
+						<a href="/{{ app.params.url_admin }}" class="logotext" style="padding-left: 20px;">
+							<!-- <img src="/admin/images/text.png" alt="home" class="light-logo" alt="home" /> -->
+							{{ app.params.name }}
+						</a>
+					</li>
+				</ul>
+				<!-- /.Logo -->
+
+				<ul class="nav navbar-top-links navbar-right pull-right">
+					<li class="dropdown">
+						<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> 
+							<img src="/admin/images/avatar.jpg" alt="user-img" width="36" class="img-circle"/>
+							<b class="hidden-xs">{{ app.session.backend_usuario }}</b> 
+						</a>
+						<ul class="dropdown-menu dropdown-user animated bounceInDown">
+							<li><a href="/{{ app.params.url_admin }}/mi-cuenta"><i class="ti-user"></i> Mi Cuenta</a> </li>
+							<li><a href="/{{ app.params.url_admin }}/cambiar-clave"><i class="ti-lock"></i> Cambiar Contraseña</a> </li>
+							<li role="separator" class="divider"></li>
+							<li><a href="/{{ app.params.url_admin }}/salir"><i class="fa fa-power-off"></i> Salir</a> </li>
+						</ul>
+						<!-- /.dropdown-user -->
+					</li>
+
+				</ul>
+
+			</div>
+		</nav>
+		<!-- End Top Navigation -->
+  
+		<!-- .Side panel -->
+		<div class="side-mini-panel">
+			<ul class="mini-nav">
+			
+				<div class="togglediv">
+					<a href="javascript:;" id="togglebtn"><i class="ti-menu"></i></a>
+				</div>
+				
+				
+				<!-- .MODULOS WEB -->
+				<li id="menu-web">
+					<a href="javascript:;">
+						<i class="linea-icon linea-basic" data-icon="&#x0053;"></i>
+					</a>
+
+					
+					<div class="sidebarmenu">
+						<h3 class="menu-title">WEB</h3>
+						
+						<ul class="sidebar-menu">
+							
+							<!-- EJEMPLO
+							<li class="menu">
+								<a href="javascript:void(0)">Proveedores
+									<i class="fa fa-angle-right pull-right"></i>
+								</a>
+								<ul class="sub-menu">
+									<li> <a href="javascript:;">Listado de Clientes</a></li>
+									<li> <a href="javascript:;">Agregar Cliente</a></li>
+								</ul>
+							</li>
+							-->
+							
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/web/estados">Estados</a>
+							</li>
+							
+							<!--
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/web/acciones">Acciones</a>
+							</li>
+							-->
+							
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/web/mensajes">Mensajes</a>
+							</li>
+							
+							<!--
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/web/traduccionesturco">Traducciones Turco</a>
+							</li>
+							-->
+							
+							<!--
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/web/estadosmensajes">Estados Mensajes</a>
+							</li>
+							-->
+							
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/web/medicos">Medicos</a>
+							</li>
+							
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/web/libros">Libros</a>
+							</li>
+							
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/web/historiales">Historiales</a>
+							</li>
+
+							<li class="menu">
+								<a href="/{{ app.params.url_admin }}/usuarios">Usuarios</a>
+							</li>
+							
+							
+							
+						</ul>
+						  
+					</div>
+				</li>
+				<!-- /.Dashboard -->
+				
+				
+				{% if app.session.backend_tipo_usuario == 'SuperAdmin' %}
+					<!-- .Modulo Sistema -->				
+					<li id="menu-configuracion">
+						<a href="javascript:;">
+							<i class="linea-icon linea-basic" data-icon="&#xe005;"></i>
+						</a>
+						
+						<div class="sidebarmenu">
+							<h3 class="menu-title">CONFIGURACIÓN</h3>
+							
+							<ul class="sidebar-menu">
+								
+								<li class="menu">
+									<a href="/{{ app.params.url_admin }}/parametros">Parametros</a>
+								</li>
+								
+								<li class="menu">
+									<a href="/{{ app.params.url_admin }}/notificaciones">Notificaciones</a>
+								</li>
+								
+								<li class="menu">
+									<a href="/{{ app.params.url_admin }}/notificacionesemails">NotificacionesEmails</a>
+								</li>
+								
+								<li class="menu">
+									<a href="/{{ app.params.url_admin }}/usuarios">Usuarios</a>
+								</li>
+								  
+							  </ul>
+							  
+						</div>
+					</li>
+				{% endif %}
+				
+				<!-- /.Dashboard -->
+
+			</ul>
+		</div>
+		<!-- /.Side panel -->
+  
+		<!-- Page Content -->		
+		<div id="page-wrapper">
+			
+			<!-- AQUI VA EL CONTENIDO -->
+			{% block contenido %} {% endblock contenido %}
+			<!-- FIN DEL CONTENIDO -->
+			
+			<footer class="footer text-center"> 2019 &copy; Backend - {{ app.params.name }}</footer>
+		</div>
+		<!-- /#page-wrapper -->
+ 
+
+	</div>
+	<!-- /#wrapper -->
+
+	<script src="/admin/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="/admin/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="/admin/js/jquery.slimscroll.js"></script>
+	<script src="/admin/js/waves.js"></script>
+	<script src="/admin/plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
+	<script src="/admin/plugins/bower_components/counterup/jquery.counterup.min.js"></script>
+	<script src="/admin/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>	
+	<script src="/admin/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
+	<script src="/admin/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script>
+	<script src="/admin/plugins/bower_components/toast-master/js/jquery.toast.js"></script>	
+	<script src="/admin/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+	<script src="/admin/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+	<script src="/admin/plugins/bower_components/custom-select/custom-select.min.js"></script>
+	<script src="/admin/plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
+	<script src="/admin/plugins/bower_components/summernote/summernote.min.js"></script>
+	<script src="/admin/plugins/bower_components/dropzone/dist/dropzone.js"></script>
+	<script src="/admin/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+	<script src="/admin/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js"></script>
+	<script src="/admin/plugins/bower_components/jquery-asColorPicker-master/libs/jquery-asColor.js"></script>
+	<script src="/admin/plugins/bower_components/jquery-asColorPicker-master/libs/jquery-asGradient.js"></script>
+	<script src="/admin/plugins/bower_components/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js"></script>
+	<script src="/admin/js/jasny-bootstrap.js"></script>
+	<script src="/admin/js/custom.min.js"></script>
+	<script src="/admin/js/scripts.js"></script>
+	
+	{% block extra_js %} {% endblock extra_js %}
+	
+	
+{{ this.endBody() }}
+</body>
+</html>
